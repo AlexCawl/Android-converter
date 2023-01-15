@@ -1,4 +1,29 @@
 <resources>
-    <string name="app_name" translatable="false">Lab24</string>
+    <string name="app_name">Преобразователь длин</string>
+    <string name="et_inch">Дюйм</string>
+    <string name="et_yard">Ярд</string>
+    <string name="et_foot">Фут</string>
+    <string name="et_mile">Миля</string>
+    <string name="et_yottametre">Иоттаметр</string>
+    <string name="et_zettametre">Зеттаметр</string>
+    <string name="et_exametre">Эксаметр</string>
+    <string name="et_petametre">Петаметр</string>
+    <string name="et_terametre">Петаметр</string>
+    <string name="et_gigametre">Гигаметр</string>
+    <string name="et_megametre">Мегаметр</string>
+    <string name="et_kilometre">Километр</string>
+    <string name="et_hectometre">Гектометр</string>
+    <string name="et_decametre">Декаметр</string>
+    <string name="et_metre">Метр</string>
+    <string name="et_decimetre">Дециметр</string>
+    <string name="et_centimetre">Сантиметр</string>
+    <string name="et_millimetre">Миллиметр</string>
+    <string name="et_micrometre">Микрометр</string>
+    <string name="et_nanometre">Нанометр</string>
+    <string name="et_picometre">Пикометр</string>
+    <string name="et_femtometre">Фемтометр</string>
+    <string name="et_attometre">Аттометр</string>
+    <string name="et_zeptometre">Зептометр</string>
+    <string name="et_yoctometre">Иоктометр</string>
 
 </resources>
