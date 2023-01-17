@@ -24,7 +24,7 @@ import ru.myitschool.lab23.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private ProducerService producerService;
+    private IProducer producerService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
