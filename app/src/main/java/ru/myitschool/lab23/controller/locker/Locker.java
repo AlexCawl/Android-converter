@@ -1,7 +1,5 @@
 package ru.myitschool.lab23.controller.locker;
 
-import ru.myitschool.lab23.controller.locker.ILocker;
-
 public class Locker implements ILocker {
     protected LockStatus status;
 

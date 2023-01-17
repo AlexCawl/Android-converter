@@ -66,9 +66,31 @@ public class MainActivity extends AppCompatActivity {
 
     private Map<EditText, LengthType> initRelations() {
         Map<EditText, LengthType> map = new HashMap<>();
-        map.put(binding.container.etMile, LengthType.MILE);
-        map.put(binding.container.etMetre, LengthType.METRE);
-        map.put(binding.container.etFoot, LengthType.FEET);
+        map.put(binding.container.layoutContent.etInch, LengthType.INCHES);
+        map.put(binding.container.layoutContent.etYard, LengthType.YARDS);
+        map.put(binding.container.layoutContent.etFoot, LengthType.FEET);
+        map.put(binding.container.layoutContent.etMile, LengthType.MILES);
+        map.put(binding.container.layoutContent.etYottametre, LengthType.YOTTAMETRES);
+        map.put(binding.container.layoutContent.etZettametre, LengthType.ZETTAMETRES);
+        map.put(binding.container.layoutContent.etExametre, LengthType.EXAMETRES);
+        map.put(binding.container.layoutContent.etPetametre, LengthType.PETAMETRES);
+        map.put(binding.container.layoutContent.etTerametre, LengthType.TERAMETRES);
+        map.put(binding.container.layoutContent.etGigametre, LengthType.GIGAMETRES);
+        map.put(binding.container.layoutContent.etMegametre, LengthType.MEGAMETRES);
+        map.put(binding.container.layoutContent.etKilometre, LengthType.KILOMETRES);
+        map.put(binding.container.layoutContent.etHectometre, LengthType.HECTOMETRES);
+        map.put(binding.container.layoutContent.etDecametre, LengthType.DECAMETRES);
+        map.put(binding.container.layoutContent.etMetre, LengthType.METRES);
+        map.put(binding.container.layoutContent.etDecimetre, LengthType.DECIMETRES);
+        map.put(binding.container.layoutContent.etCentimetre, LengthType.CENTIMETRES);
+        map.put(binding.container.layoutContent.etMillimetre, LengthType.MILLIMETRES);
+        map.put(binding.container.layoutContent.etMicrometre, LengthType.MICROMETRES);
+        map.put(binding.container.layoutContent.etNanometre, LengthType.NANOMETRES);
+        map.put(binding.container.layoutContent.etPicometre, LengthType.PICOMETRES);
+        map.put(binding.container.layoutContent.etFemtometre, LengthType.FEMTOMETRES);
+        map.put(binding.container.layoutContent.etAttometre, LengthType.ATTOMETRES);
+        map.put(binding.container.layoutContent.etZeptometre, LengthType.ZEPTOMETRES);
+        map.put(binding.container.layoutContent.etYoctometre, LengthType.YOCTOMETRES);
         return map;
     }
 }

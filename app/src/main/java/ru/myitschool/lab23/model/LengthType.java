@@ -1,7 +1,29 @@
 package ru.myitschool.lab23.model;
 
 public enum LengthType {
-    MILE,
+    INCHES,
+    YARDS,
     FEET,
-    METRE
+    MILES,
+    YOTTAMETRES,
+    ZETTAMETRES,
+    EXAMETRES,
+    PETAMETRES,
+    TERAMETRES,
+    GIGAMETRES,
+    MEGAMETRES,
+    KILOMETRES,
+    HECTOMETRES,
+    DECAMETRES,
+    METRES,
+    DECIMETRES,
+    CENTIMETRES,
+    MILLIMETRES,
+    MICROMETRES,
+    NANOMETRES,
+    PICOMETRES,
+    FEMTOMETRES,
+    ATTOMETRES,
+    ZEPTOMETRES,
+    YOCTOMETRES,
 }
