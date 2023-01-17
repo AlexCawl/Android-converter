@@ -38,7 +38,7 @@ public class ConverterWatcher implements TextWatcher {
                 double value = Double.parseDouble(editable.toString());
                 producer.sendUpdateRequest(getType(), value);
             } catch (NoHandlerException exception) {
-                System.out.println("everything broken....");
+                System.out.println("WARN | No handler exception | " + getType().name());
             } catch (NumberFormatException exception) {
                 producer.sendUpdateRequest("");
             }

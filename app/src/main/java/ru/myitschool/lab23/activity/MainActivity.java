@@ -26,12 +26,6 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ProducerService producerService;
 
-    /*
-    * Реализовать систему почтовой службы
-    * Сделать отдельный сервис по переводу из любой в любую ИЛИ сделать обработчик для каждой величины, которая переводит из метров в себя и из себя в метры
-    * Когда нажимается на любую кнопку и записывается число, то в списке всех подписанных на событие обработчиков выполняется метод
-    * */
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 list.add(new Handler(k, v));
             } catch (NoMetricaDataException e) {
-                System.out.println("Big shit bro!");
+                System.out.println("WARN | No metrica data exception! | " + v.name());
             }
         });
         return list;
