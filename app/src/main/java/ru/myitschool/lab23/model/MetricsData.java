@@ -26,7 +26,7 @@ public class MetricsData {
     private static final double FACTOR_FEMTOMETRES = Math.pow(10, 15);
     private static final double FACTOR_ATTOMETRES = Math.pow(10, 18);
     private static final double FACTOR_ZEPTOMETRES = Math.pow(10, 21);
-    private static final double FACTOR_YOCTOMETRES = Math.pow(10, -24);
+    private static final double FACTOR_YOCTOMETRES = Math.pow(10, 24);
 
 
     public static double getMetrica(LengthType type) throws NoMetricaDataException {

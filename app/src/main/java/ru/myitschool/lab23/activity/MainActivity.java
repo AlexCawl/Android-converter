@@ -1,6 +1,10 @@
 package ru.myitschool.lab23.activity;
 
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Pair;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -12,19 +16,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru.myitschool.lab23.controller.listener.ConverterListener;
+import ru.myitschool.lab23.controller.consumer.Handler;
 import ru.myitschool.lab23.controller.locker.ILocker;
 import ru.myitschool.lab23.controller.locker.Locker;
-import ru.myitschool.lab23.controller.watcher.ConverterWatcher;
 import ru.myitschool.lab23.controller.producer.IProducer;
+import ru.myitschool.lab23.controller.producer.ProducerService;
+import ru.myitschool.lab23.controller.watcher.ConverterWatcher;
+import ru.myitschool.lab23.databinding.ActivityMainBinding;
 import ru.myitschool.lab23.model.LengthType;
 import ru.myitschool.lab23.model.NoMetricaDataException;
-import ru.myitschool.lab23.controller.consumer.Handler;
-import ru.myitschool.lab23.controller.producer.ProducerService;
-import ru.myitschool.lab23.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
-    private IProducer producerService;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,59 +36,83 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        Map<EditText, LengthType> relations = initRelations();
-        List<Handler> handlers = initHandlers(relations);
+        Map<LengthType, Pair<TextView, EditText>> configData = init();
+        List<Handler> handlers = initHandlers(configData);
+
         ILocker locker = new Locker();
-        this.producerService = new ProducerService(handlers, locker);
-        Map<EditText, ConverterWatcher> watchers = initWatchers(relations, this.producerService, locker);
+        IProducer producer = new ProducerService(handlers, locker);
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+
+        Map<EditText, ConverterWatcher> watchers = initWatchers(configData, producer, locker);
         watchers.forEach(TextView::addTextChangedListener);
+
+        Map<TextView, ConverterListener> listeners = initListeners(configData, clipboard);
+        listeners.forEach(View::setOnClickListener);
     }
 
-    private List<Handler> initHandlers(Map<EditText, LengthType> relation) {
+    /**
+     * Инициализация ConvertListener, необходимых для копирования значения числа из ячейки.
+     * */
+    private Map<TextView, ConverterListener> initListeners(Map<LengthType, Pair<TextView, EditText>> configData, ClipboardManager clipboard) {
+        Map<TextView, ConverterListener> map = new HashMap<>();
+        configData.forEach((k, v) -> map.put(v.first, new ConverterListener(v.second, clipboard, k)));
+        return map;
+    }
+
+    /**
+     * Инициализация Handler, необходимых для смены значения числа в ячейке.
+     * */
+    private List<Handler> initHandlers(Map<LengthType, Pair<TextView, EditText>> configData) {
         List<Handler> list = new ArrayList<>();
-        relation.forEach((k, v) -> {
+        configData.forEach((k, v) -> {
             try {
-                list.add(new Handler(k, v));
+                list.add(new Handler(v.second, k));
             } catch (NoMetricaDataException e) {
-                System.out.println("WARN | No metrica data exception! | " + v.name());
+                System.out.println("WARN | No metrica data exception! | " + k.name());
             }
         });
         return list;
     }
 
-    private Map<EditText, ConverterWatcher> initWatchers(Map<EditText, LengthType> relation, IProducer producer, ILocker locker) {
+    /**
+     * Инициализация ConvertWatcher, необходимых для отслеживания изменения значения числа в ячейке.
+     * */
+    private Map<EditText, ConverterWatcher> initWatchers(Map<LengthType, Pair<TextView, EditText>> configData, IProducer producer, ILocker locker) {
         Map<EditText, ConverterWatcher> map = new HashMap<>();
-        relation.forEach((k, v) -> map.put(k, new ConverterWatcher(producer, locker, v)));
+        configData.forEach((k, v) -> map.put(v.second, new ConverterWatcher(producer, locker, k)));
         return map;
     }
 
-    private Map<EditText, LengthType> initRelations() {
-        Map<EditText, LengthType> map = new HashMap<>();
-        map.put(binding.container.layoutContent.etInch, LengthType.INCHES);
-        map.put(binding.container.layoutContent.etYard, LengthType.YARDS);
-        map.put(binding.container.layoutContent.etFoot, LengthType.FEET);
-        map.put(binding.container.layoutContent.etMile, LengthType.MILES);
-        map.put(binding.container.layoutContent.etYottametre, LengthType.YOTTAMETRES);
-        map.put(binding.container.layoutContent.etZettametre, LengthType.ZETTAMETRES);
-        map.put(binding.container.layoutContent.etExametre, LengthType.EXAMETRES);
-        map.put(binding.container.layoutContent.etPetametre, LengthType.PETAMETRES);
-        map.put(binding.container.layoutContent.etTerametre, LengthType.TERAMETRES);
-        map.put(binding.container.layoutContent.etGigametre, LengthType.GIGAMETRES);
-        map.put(binding.container.layoutContent.etMegametre, LengthType.MEGAMETRES);
-        map.put(binding.container.layoutContent.etKilometre, LengthType.KILOMETRES);
-        map.put(binding.container.layoutContent.etHectometre, LengthType.HECTOMETRES);
-        map.put(binding.container.layoutContent.etDecametre, LengthType.DECAMETRES);
-        map.put(binding.container.layoutContent.etMetre, LengthType.METRES);
-        map.put(binding.container.layoutContent.etDecimetre, LengthType.DECIMETRES);
-        map.put(binding.container.layoutContent.etCentimetre, LengthType.CENTIMETRES);
-        map.put(binding.container.layoutContent.etMillimetre, LengthType.MILLIMETRES);
-        map.put(binding.container.layoutContent.etMicrometre, LengthType.MICROMETRES);
-        map.put(binding.container.layoutContent.etNanometre, LengthType.NANOMETRES);
-        map.put(binding.container.layoutContent.etPicometre, LengthType.PICOMETRES);
-        map.put(binding.container.layoutContent.etFemtometre, LengthType.FEMTOMETRES);
-        map.put(binding.container.layoutContent.etAttometre, LengthType.ATTOMETRES);
-        map.put(binding.container.layoutContent.etZeptometre, LengthType.ZEPTOMETRES);
-        map.put(binding.container.layoutContent.etYoctometre, LengthType.YOCTOMETRES);
+    /**
+     * Сопоставление виджетов и их типов.
+     * */
+    private Map<LengthType, Pair<TextView, EditText>> init() {
+        Map<LengthType, Pair<TextView, EditText>> map = new HashMap<>();
+        map.put(LengthType.INCHES, Pair.create(binding.container.layoutContent.tvInch, binding.container.layoutContent.etInch));
+        map.put(LengthType.YARDS, Pair.create(binding.container.layoutContent.tvYard, binding.container.layoutContent.etYard));
+        map.put(LengthType.FEET, Pair.create(binding.container.layoutContent.tvFoot, binding.container.layoutContent.etFoot));
+        map.put(LengthType.MILES, Pair.create(binding.container.layoutContent.tvMile, binding.container.layoutContent.etMile));
+        map.put(LengthType.YOTTAMETRES, Pair.create(binding.container.layoutContent.tvYottametre, binding.container.layoutContent.etYottametre));
+        map.put(LengthType.ZETTAMETRES, Pair.create(binding.container.layoutContent.tvZettametre, binding.container.layoutContent.etZettametre));
+        map.put(LengthType.EXAMETRES, Pair.create(binding.container.layoutContent.tvExametre, binding.container.layoutContent.etExametre));
+        map.put(LengthType.PETAMETRES, Pair.create(binding.container.layoutContent.tvPetametre, binding.container.layoutContent.etPetametre));
+        map.put(LengthType.TERAMETRES, Pair.create(binding.container.layoutContent.tvTerametre, binding.container.layoutContent.etTerametre));
+        map.put(LengthType.GIGAMETRES, Pair.create(binding.container.layoutContent.tvGigametre, binding.container.layoutContent.etGigametre));
+        map.put(LengthType.MEGAMETRES, Pair.create(binding.container.layoutContent.tvMegametre, binding.container.layoutContent.etMegametre));
+        map.put(LengthType.KILOMETRES, Pair.create(binding.container.layoutContent.tvKilometre, binding.container.layoutContent.etKilometre));
+        map.put(LengthType.HECTOMETRES, Pair.create(binding.container.layoutContent.tvHectometre, binding.container.layoutContent.etHectometre));
+        map.put(LengthType.DECAMETRES, Pair.create(binding.container.layoutContent.tvDecametre, binding.container.layoutContent.etDecametre));
+        map.put(LengthType.METRES, Pair.create(binding.container.layoutContent.tvMetre, binding.container.layoutContent.etMetre));
+        map.put(LengthType.DECIMETRES, Pair.create(binding.container.layoutContent.tvDecimetre, binding.container.layoutContent.etDecimetre));
+        map.put(LengthType.CENTIMETRES, Pair.create(binding.container.layoutContent.tvCentimetre, binding.container.layoutContent.etCentimetre));
+        map.put(LengthType.MILLIMETRES, Pair.create(binding.container.layoutContent.tvMillimetre, binding.container.layoutContent.etMillimetre));
+        map.put(LengthType.MICROMETRES, Pair.create(binding.container.layoutContent.tvMicrometre, binding.container.layoutContent.etMicrometre));
+        map.put(LengthType.NANOMETRES, Pair.create(binding.container.layoutContent.tvNanometre, binding.container.layoutContent.etNanometre));
+        map.put(LengthType.PICOMETRES, Pair.create(binding.container.layoutContent.tvPicometre, binding.container.layoutContent.etPicometre));
+        map.put(LengthType.FEMTOMETRES, Pair.create(binding.container.layoutContent.tvFemtometre, binding.container.layoutContent.etFemtometre));
+        map.put(LengthType.ATTOMETRES, Pair.create(binding.container.layoutContent.tvAttometre, binding.container.layoutContent.etAttometre));
+        map.put(LengthType.ZEPTOMETRES, Pair.create(binding.container.layoutContent.tvZeptometre, binding.container.layoutContent.etZeptometre));
+        map.put(LengthType.YOCTOMETRES, Pair.create(binding.container.layoutContent.tvYoctometre, binding.container.layoutContent.etYoctometre));
         return map;
     }
 }
