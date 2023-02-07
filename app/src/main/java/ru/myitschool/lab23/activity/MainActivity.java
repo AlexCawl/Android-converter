@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 list.add(new Handler(v.second, k));
             } catch (NoMetricaDataException e) {
-                System.out.println("WARN | No metrica data exception! | " + k.name());
+                System.out.println("WARN | No metrica data exception! In initHandlers | " + k.name());
             }
         });
         return list;
@@ -79,7 +79,13 @@ public class MainActivity extends AppCompatActivity {
      * */
     private Map<EditText, ConverterWatcher> initWatchers(Map<LengthType, Pair<TextView, EditText>> configData, IProducer producer, ILocker locker) {
         Map<EditText, ConverterWatcher> map = new HashMap<>();
-        configData.forEach((k, v) -> map.put(v.second, new ConverterWatcher(producer, locker, k)));
+        configData.forEach((k, v) -> {
+            try {
+                map.put(v.second, new ConverterWatcher(producer, locker, k));
+            } catch (NoMetricaDataException e) {
+                System.out.println("WARN | No metrica data exception! In initWatchers | " + k.name());
+            }
+        });
         return map;
     }
 
